@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Anett Schutting Trivia Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      text-align: center;
+    }
+    .question {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .options input[type="radio"] {
+      margin-right: 5px;
+    }
+    .submit-btn {
+      display: block;
+      margin-top: 10px;
+    }
+    .result {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Anett Schutting Trivia Game</h1>
+  <div id="quiz-container">
+    <div id="question-container"></div>
+    <button id="submit-btn" class="submit-btn" onclick="checkAnswer()">Submit</button>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    // Define the trivia questions and answers
+    const triviaQuestions = [
+      {
+        question: "In which country was Anett Schutting born?",
+        options: ["Estonia", "Germany", "Sweden", "Netherlands"],
+        answer: "Estonia"
+      },
+      {
+        question: "What is Anett Schutting's highest world ranking in badminton singles?",
+        options: ["Top 10", "Top 20", "Top 50", "Top 100"],
+        answer: "Top 50"
+      },
+      {
+        question: "In which year did Anett Schutting win the Estonian National Badminton Championships?",
+        options: ["2016", "2017", "2018", "2019"],
+        answer: "2017"
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const questionContainer = document.getElementById("question-container");
+    const submitButton = document.getElementById("submit-btn");
+    const resultContainer = document.getElementById("result");
+
+    function displayQuestion() {
+      const currentQuestion = triviaQuestions[currentQuestionIndex];
+      const questionHTML = `
+        <div class="question">${currentQuestion.question}</div>
+        <div class="options">
+          ${currentQuestion.options
+            .map(
+              option => `
+                <label>
+                  <input type="radio" name="answer" value="${option}">
+                  ${option}
+                </label>
+              `
+            )
+            .join("")}
+        </div>
+      `;
+      questionContainer.innerHTML = questionHTML;
+      submitButton.style.display = "block";
+      resultContainer.innerHTML = "";
+    }
+
+    function checkAnswer() {
+      const selectedOption = document.querySelector('input[name="answer"]:checked');
+      if (selectedOption) {
+        const userAnswer = selectedOption.value;
+        const currentQuestion = triviaQuestions[currentQuestionIndex];
+        if (userAnswer === currentQuestion.answer) {
+          score++;
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < triviaQuestions.length) {
+          displayQuestion();
+        } else {
+          displayResult();
+        }
+      }
+    }
+
+    function displayResult() {
+      const totalQuestions = triviaQuestions.length;
+      const resultHTML = `
+        <h2>Quiz Completed</h2>
+        <p>You scored ${score} out of ${totalQuestions}.</p>
+      `;
+      questionContainer.innerHTML = "";
+      submitButton.style.display = "none";
+      resultContainer.innerHTML = resultHTML;
+    }
+
+    // Start the trivia game
+    displayQuestion();
+  </script>
+</body>
+</html>
+
